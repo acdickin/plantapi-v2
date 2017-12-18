@@ -1,0 +1,30 @@
+<h1>All Companion Plants</h1>
+<form method="post" action="/plant/add">
+  <input type="text" name="name" placeholder="Add Name">
+
+  <h4>type</h4>
+  <select name="type">
+    <option value='fruit'>fruit</option>
+    <option value='vegitable'>vegitable</option>
+    <option value='herb'>herb</option>
+    <option value='flower'>flower</option>
+  </select>
+  <br/>
+  <input type="text" name="companion" placeholder="Add Companions names">
+  <br/>
+  <input type="text" name="adversary" placeholder="Add Adversarys names">
+  <br/>
+  <input type="text" name="notes" placeholder="Add Notes">
+  <br/>
+  <input type="submit" value="submit">
+</form>
+
+
+
+<% plants.forEach(function(plants){%>
+  <h3><%=  plants.value.name %></h3><br/>
+  <strong>Type:</strong> <%= plants.value.type %><br/>
+  <strong>Companions:</strong> <%=  plants.value.companion %><br/>
+  <strong>Adversarys:</strong> <%=  plants.value.adversary %><br/>
+  <strong>Notes:</strong> <%=  plants.value.notes %><br/>
+<% }) %>
