@@ -1,7 +1,16 @@
-var express = require('express');
 var bodyParser = require('body-parser');
-var path = require('path');
 var NodeCouchDB = require('node-couchdb');
+var bcrypt = require('bcryptjs');
+
+var plantRoutes = require('./routes/plant')
+var userRoutes = require('./routes/user')
+
+var path = require('path');
+var express =require('express');
+var app = express();
+
+var Promises= require('bluebird');
+
 
 const couch = new NodeCouchDB({
   auth:{
@@ -10,17 +19,10 @@ const couch = new NodeCouchDB({
   }
 });
 
-const plantdb='plants'
-const viewUrl='_design/all_plants/_view/all'
-
+const PORT =3000;
 // couch.listDatabases().then((dbs)=>{
 //   console.log(dbs);
 // })
-var app = express();
-var Promises= require('bluebird');
-
-const PORT =3000;
-
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -31,18 +33,10 @@ app.get('/', (req,res)=>{
   res.render('index');
 })
 
-app.get('/plants', (req,res)=>{
-  couch.get(plantdb,viewUrl).then(
-    (data, header, status)=>{
-        console.log(data.data.rows);
-        res.render('plants',{
-          plants:data.data.rows
-        })
-    },
-    (err)=>{
-       res.send(err)
-    })
-})
+const plantdb='plants';
+const AllPlantsView='_design/all_plants/_view/all';
+
+
 
 app.post('/plant/add',(req,res)=>{
   couch.uniqid().then((ids)=>{
@@ -65,6 +59,10 @@ app.post('/plant/add',(req,res)=>{
     })
   })
 })
+
+
+
+
 
 app.listen(PORT,()=>{
   console.log('Server started on: ' + PORT)
